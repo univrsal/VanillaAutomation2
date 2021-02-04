@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "vanillaautomation:xp_hopper"
+  },
+  "pattern": [
+    "e",
+    "h"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "e": {
+      "item": "minecraft:ender_eye"
+    },
+    "h": {
+      "item": "minecraft:hopper"
+    }
+  }
+}

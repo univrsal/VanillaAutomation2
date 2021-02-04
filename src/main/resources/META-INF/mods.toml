@@ -1,0 +1,22 @@
+modLoader="javafml"
+loaderVersion="[${javafml_min},)"
+issueTrackerURL="https://github.com/univrsal/vanillaautomation/issues"
+license="GNU General Public License v2.0"
+
+[[mods]]
+    modId="vanillaautomation"
+    namespace="vanillaautomation"
+    version="${version}"
+    displayName="Vanilla Automation"
+    authors="univrsal"
+    description='''
+        Small tweaks for automation.
+    '''
+    displayURL="https://example.com"
+
+[[dependencies.ironchest]]
+    modId="forge"
+    mandatory=true
+    versionRange="[${forge_version_min},${forge_version_max})"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,9 @@
+{
+    "parent": "block/hopper",
+    "textures": {
+        "side": "blocks/hopper_outside",
+        "top": "vanillaautomation:block/xp_hopper_top",
+        "particle": "blocks/hopper_outside",
+        "inside": "vanillaautomation:block/xp_hopper_inside"
+    }
+} 
