@@ -1,94 +1,22 @@
 {
   "variants": {
-    "facing=down,enabled=true": {
-      "model": "block/hopper",
-      "uvlock": true,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
+    "facing=down": {
+      "model": "vanillaautomation:block/xp_hopper"
     },
-    "facing=down,enabled=false": {
-      "model": "block/hopper",
-      "uvlock": true,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
+    "facing=east": {
+      "model": "vanillaautomation:block/xp_hopper_side",
+      "y": 90
     },
-    
-    "facing=north,enabled=true": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
+    "facing=north": {
+      "model": "vanillaautomation:block/xp_hopper_side"
     },
-    "facing=north,enabled=false": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
+    "facing=south": {
+      "model": "vanillaautomation:block/xp_hopper_side",
+      "y": 180
     },
-
-    "facing=south,enabled=true": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "y": 180,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
-    },
-    "facing=south,enabled=false": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "y": 180,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
-    },
-
-    "facing=west,enabled=true": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "y": 270,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
-    },
-    "facing=west,enabled=false": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "y": 270,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
-    },
-
-    "facing=east,enabled=true": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "y": 90,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
-    },
-    "facing=east,enabled=false": {
-      "model": "block/hopper_side",
-      "uvlock": true,
-      "y": 90,
-      "textures": {
-        "top": "vanillaautomation:block/xp_hopper_top",
-        "inside": "vanillaautomation:block/xp_hopper_inside"
-      }
+    "facing=west": {
+      "model": "vanillaautomation:block/xp_hopper_side",
+      "y": 270
     }
   }
 }

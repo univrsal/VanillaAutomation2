@@ -1,1 +1,4 @@
-{ "block.vanillaautomation.xp_hopper": "XP Hopper" }
+{
+    "block.vanillaautomation.xp_hopper": "XP Hopper",
+    "vanillaautomation.container.xp_hopper": "XP Hopper"
+}
