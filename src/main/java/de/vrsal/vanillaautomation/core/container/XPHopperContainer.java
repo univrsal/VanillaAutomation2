@@ -13,27 +13,22 @@ import net.minecraft.item.Items;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 
-public class XPHopperContainer extends Container {
-
-	private final IInventory playerInventory;
-	private final IInventory tileInventory;
+public class XPHopperContainer extends BaseContainer {
 	private IIntArray progress;
 	
-	protected XPHopperContainer(ContainerType<?> type, int id, PlayerInventory playerInventory) {
+	protected XPHopperContainer(ContainerType<? extends BaseContainer> type, int id, PlayerInventory playerInventory) {
 		this(type, id, playerInventory, new Inventory(6), new IntArray(1));
 	}
-	
+
 	public int getProgress()
 	{
 		return progress.get(0);
 	}
-	
-	public XPHopperContainer(ContainerType<?> type, int id, PlayerInventory playerInventory, IInventory inventory, IIntArray progress) {
-		super(type, id);
+
+	public XPHopperContainer(ContainerType<? extends BaseContainer> type, int id, PlayerInventory playerInventory, IInventory inventory, IIntArray progress) {
+		super(type, id, playerInventory, inventory);
 		assertIntArraySize(progress, 1);
 		assertInventorySize(inventory, 6);
-		this.playerInventory = playerInventory;
-		this.tileInventory = inventory;
 
 		inventory.openInventory(playerInventory.player);
 		
@@ -88,24 +83,11 @@ public class XPHopperContainer extends Container {
 	      return itemstack;
 	}
 
-	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return this.tileInventory.isUsableByPlayer(playerIn);
-	}
-
-	public static XPHopperContainer createContainer(int windowId, PlayerInventory playerInventory) {
+	public static XPHopperContainer create(int windowId, PlayerInventory playerInventory) {
 		return new XPHopperContainer(ModContainers.XP_HOPPER.get(), windowId, playerInventory);
 	}
 
-	public IInventory getPlayerInventory() {
-		return playerInventory;
-	}
-
-	public IInventory getTileInventory() {
-		return tileInventory;
-	}
-
-	public static Container createContainer(int id, PlayerInventory player, IInventory hopperInv, IIntArray fields) {
+	public static XPHopperContainer create(int id, PlayerInventory player, IInventory hopperInv, IIntArray fields) {
 		return new XPHopperContainer(ModContainers.XP_HOPPER.get(), id, player, hopperInv, fields);
 	}
 }

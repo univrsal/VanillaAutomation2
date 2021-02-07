@@ -10,6 +10,8 @@ public class ModContainers {
 	public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, VanillaAutomation.MOD_ID);
 
 	public static final RegistryObject<ContainerType<XPHopperContainer>> XP_HOPPER = CONTAINERS.register("xp_hopper",
-			() -> new ContainerType<>(XPHopperContainer::createContainer));
+			() -> new ContainerType<>(XPHopperContainer::create));
+	public static final RegistryObject<ContainerType<FilteredHopperContainer>> FILTERED_HOPPER = CONTAINERS.register("filtered_hopper",
+			() -> new ContainerType<>(FilteredHopperContainer::create));
 
 }

@@ -14,6 +14,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -21,6 +22,7 @@ public abstract class TileHopperBase extends LockableLootTileEntity implements I
     protected NonNullList<ItemStack> hopperInventory;
     protected int transferCooldown = 0;
     protected String defaultName;
+    protected Function<IHopper, Boolean> pullFunction = HopperTileEntity::pullItems;
 
     public TileHopperBase(TileEntityType<? extends TileHopperBase> t, int invSize, String defaultName) {
         super(t);
@@ -35,6 +37,10 @@ public abstract class TileHopperBase extends LockableLootTileEntity implements I
 
     @Override
     public int getSizeInventory() {
+        return this.hopperInventory.size();
+    }
+
+    public int getSizeInventoryForOutput() {
         return this.hopperInventory.size();
     }
 
@@ -113,7 +119,7 @@ public abstract class TileHopperBase extends LockableLootTileEntity implements I
             --this.transferCooldown;
             if (!this.isOnTransferCooldown()) {
                 this.setTransferCooldown(0);
-                this.updateHopper(() -> HopperTileEntity.pullItems(this));
+                this.updateHopper(() -> pullFunction.apply(this));
             }
         }
     }
@@ -127,8 +133,7 @@ public abstract class TileHopperBase extends LockableLootTileEntity implements I
             if (this.isInventoryFull(iinventory, direction)) {
                 return false;
             } else {
-                for (int i = 0; i < this.getSizeInventory() - 1; ++i) { // -1 because we don't want to transfer out the
-                    // bottles
+                for (int i = 0; i < this.getSizeInventoryForOutput(); ++i) {
                     if (!this.getStackInSlot(i).isEmpty()) {
                         ItemStack itemstack = this.getStackInSlot(i).copy();
                         ItemStack itemstack1 = HopperTileEntity.putStackInInventoryAllSlots(this, iinventory,
@@ -137,7 +142,6 @@ public abstract class TileHopperBase extends LockableLootTileEntity implements I
                             iinventory.markDirty();
                             return true;
                         }
-
                         this.setInventorySlotContents(i, itemstack);
                     }
                 }
@@ -155,7 +159,7 @@ public abstract class TileHopperBase extends LockableLootTileEntity implements I
         this.transferCooldown = transferCooldown;
     }
 
-    protected abstract void customHopperAction();
+    protected void customHopperAction() {};
 
     protected boolean updateHopper(Supplier<Boolean> sup) {
         if (this.world == null || this.world.isRemote || !this.getBlockState().get(HopperBlock.ENABLED))

@@ -1,6 +1,8 @@
 package de.vrsal.vanillaautomation;
 
 import de.vrsal.vanillaautomation.client.render.ClientRenderers;
+import de.vrsal.vanillaautomation.client.screen.FilteredHopperGui;
+import de.vrsal.vanillaautomation.core.network.NetworkHandler;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -48,7 +50,7 @@ public class VanillaAutomation
 
     private void setup(final FMLCommonSetupEvent event)
     {
-
+        NetworkHandler.register();
     }
     
     @OnlyIn(Dist.CLIENT)
@@ -56,6 +58,7 @@ public class VanillaAutomation
     {
         ClientRenderers.setup();
     	ScreenManager.registerFactory(ModContainers.XP_HOPPER.get(), XPHopperGui::new);
+        ScreenManager.registerFactory(ModContainers.FILTERED_HOPPER.get(), FilteredHopperGui::new);
     }
 
     @SubscribeEvent

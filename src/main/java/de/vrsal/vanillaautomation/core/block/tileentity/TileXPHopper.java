@@ -49,7 +49,7 @@ public class TileXPHopper extends TileHopperBase {
 
 	@Override
 	protected Container createMenu(int id, PlayerInventory player) {
-		return XPHopperContainer.createContainer(id, player, this, fields);
+		return XPHopperContainer.create(id, player, this, fields);
 	}
 
 	@Override
@@ -64,8 +64,9 @@ public class TileXPHopper extends TileHopperBase {
 		super.read(state, nbt);
 	}
 
-	public int getProgress() {
-		return progress;
+	@Override
+	public int getSizeInventoryForOutput() {
+		return getSizeInventory() - 1;
 	}
 
 	/* === Hopper stuff === */

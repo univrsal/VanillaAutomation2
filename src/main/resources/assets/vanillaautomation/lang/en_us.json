@@ -1,6 +1,15 @@
 {
     "block.vanillaautomation.xp_hopper": "XP Hopper",
+    "block.vanillaautomation.filtered_hopper": "Filtered Hopper",
     "vanillaautomation.container.xp_hopper": "XP Hopper",
+    "vanillaautomation.container.filtered_hopper": "Filtered Hopper",
     "item.vanillaautomation.xp_hopper_cart": "XP Hopper Minecart",
-    "entity.vanillaautomation.xp_hopper_cart": "XP Hopper Minecart"
+    "entity.vanillaautomation.xp_hopper_cart": "XP Hopper Minecart",
+    "item.vanillaautomation.filtered_hopper_cart": "Filtered Hopper Minecart",
+    "entity.vanillaautomation.filtered_hopper_cart": "Filtered Hopper Minecart",
+
+    "gui.vanillaautomation.match.meta": "Match meta",
+    "gui.vanillaautomation.match.nbt": "Match NBT",
+    "gui.vanillaautomation.match.mod": "Match mod id",
+    "gui.vanillaautomation.filters": "Filters"
 }
