@@ -46,7 +46,6 @@ public class XPHopper extends HopperBlock {
 			}
 			return ActionResultType.CONSUME;
 		}
-
 	}
 	
 	@Override

@@ -15,8 +15,8 @@ import net.minecraft.util.IntArray;
 
 public class XPHopperContainer extends Container {
 
-	private IInventory playerInventory;
-	private IInventory tileInventory;
+	private final IInventory playerInventory;
+	private final IInventory tileInventory;
 	private IIntArray progress;
 	
 	protected XPHopperContainer(ContainerType<?> type, int id, PlayerInventory playerInventory) {
@@ -105,7 +105,7 @@ public class XPHopperContainer extends Container {
 		return tileInventory;
 	}
 
-	public static Container createContainer(int id, PlayerInventory player, TileXPHopper tileXPHopper) {
-		return new XPHopperContainer(ModContainers.XP_HOPPER.get(), id, player, tileXPHopper, tileXPHopper.fields);
+	public static Container createContainer(int id, PlayerInventory player, IInventory hopperInv, IIntArray fields) {
+		return new XPHopperContainer(ModContainers.XP_HOPPER.get(), id, player, hopperInv, fields);
 	}
 }

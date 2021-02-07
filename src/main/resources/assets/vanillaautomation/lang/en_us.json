@@ -1,4 +1,6 @@
 {
     "block.vanillaautomation.xp_hopper": "XP Hopper",
-    "vanillaautomation.container.xp_hopper": "XP Hopper"
+    "vanillaautomation.container.xp_hopper": "XP Hopper",
+    "item.vanillaautomation.xp_hopper_cart": "XP Hopper Minecart",
+    "entity.vanillaautomation.xp_hopper_cart": "XP Hopper Minecart"
 }

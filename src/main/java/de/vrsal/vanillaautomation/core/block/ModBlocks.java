@@ -17,10 +17,10 @@ public class ModBlocks {
 	  public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, VanillaAutomation.MOD_ID);
 	  public static final DeferredRegister<Item> ITEMS = ModItems.ITEMS;
 	  
-	  public static final RegistryObject<XPHopper> XP_HOPPER = register("xp_hopper", () -> new XPHopper());
+	  public static final RegistryObject<XPHopper> XP_HOPPER = register("xp_hopper", XPHopper::new);
 	  
 	  private static <T extends Block> RegistryObject<T> register(String name, Supplier<? extends T> sup) {
-		  return register(name, sup, block -> item(block));
+		  return register(name, sup, ModBlocks::item);
 	  }
 
 	  private static <T extends Block> RegistryObject<T> register(String name, Supplier<? extends T> sup, Function<RegistryObject<T>, Supplier<? extends Item>> itemCreator) {

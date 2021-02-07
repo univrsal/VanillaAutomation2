@@ -1,6 +1,8 @@
 package de.vrsal.vanillaautomation;
 
+import de.vrsal.vanillaautomation.client.render.ClientRenderers;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,6 +20,7 @@ import de.vrsal.vanillaautomation.client.screen.XPHopperGui;
 import de.vrsal.vanillaautomation.core.block.ModBlocks;
 import de.vrsal.vanillaautomation.core.block.tileentity.ModTiles;
 import de.vrsal.vanillaautomation.core.container.ModContainers;
+import de.vrsal.vanillaautomation.core.entity.ModEntities;
 import de.vrsal.vanillaautomation.core.item.ModItems;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -40,6 +43,7 @@ public class VanillaAutomation
         ModItems.ITEMS.register(modBus);
         ModTiles.TILE_ENTITIES.register(modBus);
         ModContainers.CONTAINERS.register(modBus);
+        ModEntities.ENTITIES.register(modBus);
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -50,6 +54,7 @@ public class VanillaAutomation
     @OnlyIn(Dist.CLIENT)
     private void doClientStuff(final FMLClientSetupEvent event)
     {
+        ClientRenderers.setup();
     	ScreenManager.registerFactory(ModContainers.XP_HOPPER.get(), XPHopperGui::new);
     }
 
