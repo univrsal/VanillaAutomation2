@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "vanillaautomation:block/filtered_hopper"
+    },
+    "facing=east": {
+      "model": "vanillaautomation:block/filtered_hopper_side",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "vanillaautomation:block/filtered_hopper_side"
+    },
+    "facing=south": {
+      "model": "vanillaautomation:block/filtered_hopper_side",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "vanillaautomation:block/filtered_hopper_side",
+      "y": 270
+    }
+  }
+}

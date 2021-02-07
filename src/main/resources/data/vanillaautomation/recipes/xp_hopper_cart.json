@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "vanillaautomation:xp_hopper_cart"
+  },
+  "pattern": [
+    "h",
+    "c"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "h": {
+      "item": "vanillaautomation:xp_hopper"
+    },
+    "c": {
+      "item": "minecraft:minecart"
+    }
+  }
+}
