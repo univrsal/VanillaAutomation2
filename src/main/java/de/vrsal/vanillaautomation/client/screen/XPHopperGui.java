@@ -36,7 +36,6 @@ public class XPHopperGui extends ContainerScreen<XPHopperContainer> implements I
 		this.playerInventoryTitleY = this.ySize - 94;
 		this.playerInventory = inv;
 		this.container = screenContainer;
-
 	}
 
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {

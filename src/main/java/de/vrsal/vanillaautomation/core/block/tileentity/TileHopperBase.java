@@ -26,7 +26,7 @@ public abstract class TileHopperBase extends LockableLootTileEntity implements I
 
     public TileHopperBase(TileEntityType<? extends TileHopperBase> t, int invSize, String defaultName) {
         super(t);
-        this.hopperInventory = NonNullList.<ItemStack>withSize(invSize, ItemStack.EMPTY);
+        this.hopperInventory = NonNullList.withSize(invSize, ItemStack.EMPTY);
         this.defaultName = VanillaAutomation.MOD_ID + ".container." + defaultName;
     }
 

@@ -1,11 +1,9 @@
 package de.vrsal.vanillaautomation.core.container;
 
-import de.vrsal.vanillaautomation.core.block.tileentity.TileXPHopper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -14,7 +12,7 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 
 public class XPHopperContainer extends BaseContainer {
-	private IIntArray progress;
+	private final IIntArray progress;
 	
 	protected XPHopperContainer(ContainerType<? extends BaseContainer> type, int id, PlayerInventory playerInventory) {
 		this(type, id, playerInventory, new Inventory(6), new IntArray(1));
@@ -48,6 +46,7 @@ public class XPHopperContainer extends BaseContainer {
 		for (int i1 = 0; i1 < 9; ++i1) {
 			this.addSlot(new Slot(playerInventory, i1, 8 + i1 * 18, 109));
 		}
+
 		this.progress = progress;
 		this.trackIntArray(this.progress);
 	}

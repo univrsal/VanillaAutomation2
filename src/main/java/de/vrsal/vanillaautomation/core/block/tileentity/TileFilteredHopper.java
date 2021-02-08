@@ -25,6 +25,7 @@ public class TileFilteredHopper extends TileHopperBase {
     private boolean matchMeta = true;
     private boolean matchNBT = false;
     private boolean matchMod = false;
+
     public final IIntArray fields = new IIntArray() {
 
         @Override
@@ -36,7 +37,7 @@ public class TileFilteredHopper extends TileHopperBase {
             else if (index == NBT)
                 return TileFilteredHopper.this.matchNBT ? 1 : 0;
             else if (index == MOD)
-                return TileFilteredHopper.this.matchNBT ? 1 : 0;
+                return TileFilteredHopper.this.matchMod ? 1 : 0;
             return 0;
         }
 
@@ -60,22 +61,22 @@ public class TileFilteredHopper extends TileHopperBase {
 
     public void setMatchMeta(boolean b)
     {
-        fields.set(META, b ? 1 : 0);
+        this.matchMeta = b;
     }
 
     public void setMatchNBT(boolean b)
     {
-        fields.set(NBT, b ? 1 : 0);
+        this.matchNBT = b;
     }
 
     public void setMatchMod(boolean b)
     {
-        fields.set(MOD, b ? 1 : 0);
+       this.matchMod = b;
     }
 
     public void setWhitelist(boolean b)
     {
-        fields.set(WHITELIST, b ? 1 : 0);
+        this.whitelist = b;
     }
 
     public TileFilteredHopper() {
@@ -120,6 +121,11 @@ public class TileFilteredHopper extends TileHopperBase {
         return false;
     }
 
+    @Override
+    public int getSizeInventoryForOutput() {
+        return 5;
+    }
+
     private boolean adjust(boolean in) {
         return whitelist == in;
     }
@@ -130,35 +136,25 @@ public class TileFilteredHopper extends TileHopperBase {
         for (int i = getSizeInventoryForOutput(); i < getSizeInventory(); i++) {
             if (getStackInSlot(i).getItem().equals(in.getItem())) {
                 matchesItem = true;
-                break;
-            }
-        }
-
-        for (int i = getSizeInventoryForOutput(); i < getSizeInventory(); i++) {
-            if (getStackInSlot(i).getDamage() == in.getDamage()) {
-                matchesMeta = true;
-                break;
-            }
-        }
-
-        for (int i = getSizeInventoryForOutput(); i < getSizeInventory(); i++) {
-            if (getModName(getStackInSlot(i)).equals(getModName(in))) {
-                matchesMod = true;
-                break;
-            }
-        }
-
-        if (in.hasTag()) {
-            for (int i = getSizeInventoryForOutput(); i < getSizeInventory(); i++) {
-                if (getStackInSlot(i).getOrCreateTag().equals(in.getOrCreateTag())) {
+                if (getStackInSlot(i).getDamage() == in.getDamage())
+                    matchesMeta = true;
+                if (getStackInSlot(i).getOrCreateTag().equals(in.getOrCreateTag()))
                     matchesNBT = true;
-                    break;
-                }
             }
+            if (getModName(getStackInSlot(i)).equals(getModName(in)))
+                matchesMod = true;
         }
 
-        return adjust(matchesItem) && (!matchMeta || adjust(matchesMeta)) && (!matchNBT || adjust(matchesNBT)) &&
-                (!matchMod || adjust(matchesMod));
+        if (whitelist) {
+            return (matchesMod || matchesItem) && (!matchMeta || matchesMeta) && (!matchNBT || matchesNBT) &&
+                    (!matchMod || matchesMod);
+        }
+        return (!matchesItem && !matchMod) || (matchMeta && !matchesMeta) || (matchNBT && !matchesNBT) || (matchMod && !matchesMod);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
     }
 
     public boolean pullItems(IHopper hopper) {
@@ -171,7 +167,7 @@ public class TileFilteredHopper extends TileHopperBase {
                     -> pullItemFromSlot(hopper, iinventory, index, direction));
         } else {
             for (ItemEntity itementity : HopperTileEntity.getCaptureItems(hopper)) {
-                if (HopperTileEntity.captureItem(hopper, itementity)) {
+                if (isItemStackAllowed(itementity.getItem()) && HopperTileEntity.captureItem(hopper, itementity)) {
                     return true;
                 }
             }

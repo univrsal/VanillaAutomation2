@@ -13,6 +13,6 @@ public class ModTiles {
 
 	  public static final RegistryObject<TileEntityType<TileXPHopper>> XP_HOPPER = TILE_ENTITIES.register(
 	          "xp_hopper", () -> new TileEntityType<>(TileXPHopper::new, Sets.newHashSet(ModBlocks.XP_HOPPER.get()), null));
-	public static final RegistryObject<TileEntityType<TileXPHopper>> FILTERED_HOPPER = TILE_ENTITIES.register(
-			"filtered_hopper", () -> new TileEntityType<>(TileXPHopper::new, Sets.newHashSet(ModBlocks.FILTERED_HOPPER.get()), null));
+	public static final RegistryObject<TileEntityType<TileFilteredHopper>> FILTERED_HOPPER = TILE_ENTITIES.register(
+			"filtered_hopper", () -> new TileEntityType<>(TileFilteredHopper::new, Sets.newHashSet(ModBlocks.FILTERED_HOPPER.get()), null));
 }

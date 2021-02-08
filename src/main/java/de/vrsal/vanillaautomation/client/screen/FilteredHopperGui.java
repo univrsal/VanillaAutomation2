@@ -4,6 +4,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.vrsal.vanillaautomation.VanillaAutomation;
 import de.vrsal.vanillaautomation.client.screen.widgets.ButtonCheckbox;
+import de.vrsal.vanillaautomation.client.screen.widgets.ButtonCycleIcon;
+import de.vrsal.vanillaautomation.client.screen.widgets.IconType;
 import de.vrsal.vanillaautomation.core.block.tileentity.TileFilteredHopper;
 import de.vrsal.vanillaautomation.core.block.tileentity.TileXPHopper;
 import de.vrsal.vanillaautomation.core.container.FilteredHopperContainer;
@@ -33,6 +35,7 @@ public class FilteredHopperGui extends ContainerScreen<FilteredHopperContainer> 
     private ButtonCheckbox btnMatchMeta;
     private ButtonCheckbox btnMatchNBT;
     private ButtonCheckbox btnMatchMod;
+    private ButtonCycleIcon btnIco;
     private int xOffset = 0;
     private TranslationTextComponent filterText;
 
@@ -44,10 +47,6 @@ public class FilteredHopperGui extends ContainerScreen<FilteredHopperContainer> 
         this.playerInventory = inv;
         this.container = screenContainer;
         this.filterText = new TranslationTextComponent(LibLocalization.LABEL_FILTERS);
-    }
-
-    boolean getField(int id) {
-        return container.fields.get(id) != 0;
     }
 
     @Override
@@ -66,17 +65,17 @@ public class FilteredHopperGui extends ContainerScreen<FilteredHopperContainer> 
     @Override
     protected void init() {
         super.init();
-//        btnIco = new ButtonIcon(0, guiLeft + 136, guiTop + 38, ButtonIcon.IconType.values()[hopperInventory.getField(0)]);
         xOffset = minecraft.fontRenderer.getStringWidth(I18n.format(LibLocalization.LABEL_MOD)) + 21;
 
         Button.IPressable onPress = btn -> {
-            NetworkHandler.sendToServer(new MessageFilterChanged(false, btnMatchMeta.isChecked(),
+            NetworkHandler.sendToServer(new MessageFilterChanged(btnIco.getState() == 1, btnMatchMeta.isChecked(),
                     btnMatchNBT.isChecked(), btnMatchMod.isChecked()));
         };
 
-        btnMatchMeta = addButton(new ButtonCheckbox(LibLocalization.LABEL_META, guiLeft - xOffset, guiTop + 12, getField(TileFilteredHopper.META), onPress));
-        btnMatchNBT = addButton(new ButtonCheckbox(LibLocalization.LABEL_NBT, guiLeft - xOffset, guiTop + 24, getField(TileFilteredHopper.NBT), onPress));
-        btnMatchMod = addButton(new ButtonCheckbox(LibLocalization.LABEL_MOD, guiLeft - xOffset, guiTop + 36, getField(TileFilteredHopper.MOD), onPress));
+        btnIco = addButton(new ButtonCycleIcon(guiLeft + 133, guiTop + 44, TileFilteredHopper.WHITELIST, container.getFields(), IconType.BLACKLIST, onPress));
+        btnMatchMeta = addButton(new ButtonCheckbox(LibLocalization.LABEL_META, guiLeft - xOffset, guiTop + 12, TileFilteredHopper.META, container.getFields(), onPress));
+        btnMatchNBT = addButton(new ButtonCheckbox(LibLocalization.LABEL_NBT, guiLeft - xOffset, guiTop + 24, TileFilteredHopper.NBT, container.getFields(), onPress));
+        btnMatchMod = addButton(new ButtonCheckbox(LibLocalization.LABEL_MOD, guiLeft - xOffset, guiTop + 36, TileFilteredHopper.MOD, container.getFields(), onPress));
     }
 
     @Override

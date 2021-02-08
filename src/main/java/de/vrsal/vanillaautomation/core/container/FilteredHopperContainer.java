@@ -8,18 +8,18 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.OnlyIns;
 
 public class FilteredHopperContainer extends BaseContainer {
-    public IIntArray fields;
+    private final IIntArray fields;
 
     TileFilteredHopper te = null;
 
     public FilteredHopperContainer(ContainerType<? extends BaseContainer> type, int id, PlayerInventory playerInventory, IInventory tileInventory, IIntArray fields) {
         super(type, id, playerInventory, tileInventory);
-        this.fields = fields;
+        assertIntArraySize(fields, 4);
+        assertInventorySize(tileInventory, 5);
+
+        tileInventory.openInventory(playerInventory.player);
 
         if (tileInventory instanceof TileFilteredHopper)
             this.te = (TileFilteredHopper) tileInventory;
@@ -42,8 +42,15 @@ public class FilteredHopperContainer extends BaseContainer {
 
         for (int i1 = 0; i1 < 9; ++i1)
             this.addSlot(new Slot(playerInventory, i1, 8 + i1 * 18, 58 + i));
-        trackIntArray(fields);
+
+        this.fields = fields;
+        this.trackIntArray(this.fields);
     }
+
+    public IIntArray getFields() {
+        return fields;
+    }
+
 
     public FilteredHopperContainer(ContainerType<FilteredHopperContainer> type, int windowId, PlayerInventory playerInventory) {
         this(type, windowId, playerInventory, new Inventory(10), new IntArray(4));
