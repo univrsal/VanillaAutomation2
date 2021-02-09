@@ -163,6 +163,7 @@ public class TileFilteredHopper extends TileHopperBase {
         IInventory iinventory = HopperTileEntity.getSourceInventory(hopper);
         if (iinventory != null) {
             Direction direction = Direction.DOWN;
+            System.out.println(isInventoryEmpty(iinventory, direction));
             return !isInventoryEmpty(iinventory, direction) && getValidSlotsForSide(iinventory, direction).anyMatch((index)
                     -> pullItemFromSlot(hopper, iinventory, index, direction));
         } else {
@@ -173,6 +174,16 @@ public class TileFilteredHopper extends TileHopperBase {
             }
 
             return false;
+        }
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        if (index >= getSizeInventoryForOutput()) {
+            // Filter slots
+            return false;
+        } else {
+            return isItemStackAllowed(stack);
         }
     }
 
