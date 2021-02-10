@@ -5,7 +5,7 @@ bin
 .metadata
 .classpath
 .project
-
+*.xcf
 # idea
 out
 *.ipr

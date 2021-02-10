@@ -42,10 +42,6 @@ public class XPHopperCartEntity extends HopperCartEntityBase {
         super(ModEntities.XP_HOPPER_CART.get(), worldIn, x, y, z, ModBlocks.XP_HOPPER.get().getDefaultState());
     }
 
-    public static XPHopperCartEntity create(World worldIn, double x, double y, double z) {
-        return new XPHopperCartEntity(worldIn, x, y, z);
-    }
-
     @Override
     protected Container createContainer(int id, PlayerInventory playerInventoryIn) {
         return new XPHopperContainer(ModContainers.XP_HOPPER.get(), id, playerInventoryIn, this, this.fields);

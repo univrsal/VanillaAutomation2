@@ -20,4 +20,8 @@ public class BaseContainer extends Container {
     public boolean canInteractWith(PlayerEntity playerIn) {
         return this.tileInventory.isUsableByPlayer(playerIn);
     }
+
+    public IInventory getTileInventory() {
+        return tileInventory;
+    }
 }

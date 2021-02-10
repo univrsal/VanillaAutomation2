@@ -1,6 +1,5 @@
 package de.vrsal.vanillaautomation.core.entity;
 
-import de.vrsal.vanillaautomation.core.block.tileentity.TileXPHopper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;

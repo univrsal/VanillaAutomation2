@@ -16,7 +16,7 @@ import net.minecraft.util.IIntArray;
 
 import java.util.stream.IntStream;
 
-public class TileFilteredHopper extends TileHopperBase {
+public class TileFilteredHopper extends TileHopperBase implements IFilteredHopper {
     public static final int WHITELIST = 0;
     public static final int META = 1;
     public static final int NBT = 2;
@@ -59,21 +59,25 @@ public class TileFilteredHopper extends TileHopperBase {
         }
     };
 
+    @Override
     public void setMatchMeta(boolean b)
     {
         this.matchMeta = b;
     }
 
+    @Override
     public void setMatchNBT(boolean b)
     {
         this.matchNBT = b;
     }
 
+    @Override
     public void setMatchMod(boolean b)
     {
        this.matchMod = b;
     }
 
+    @Override
     public void setWhitelist(boolean b)
     {
         this.whitelist = b;
@@ -81,7 +85,7 @@ public class TileFilteredHopper extends TileHopperBase {
 
     public TileFilteredHopper() {
         super(ModTiles.FILTERED_HOPPER.get(), 10, "filtered_hopper");
-        this.pullFunction = this::pullItems;
+        this.pullFunction = TileFilteredHopper::pullItems;
     }
 
     private static IntStream getValidSlotsForSide(IInventory p_213972_0_, Direction p_213972_1_) {
@@ -105,9 +109,9 @@ public class TileFilteredHopper extends TileHopperBase {
         return !(inventoryIn instanceof ISidedInventory) || ((ISidedInventory) inventoryIn).canExtractItem(index, stack, side);
     }
 
-    private boolean pullItemFromSlot(IHopper hopper, IInventory inventoryIn, int index, Direction direction) {
+    private static boolean pullItemFromSlot(IFilteredHopper hopper, IInventory inventoryIn, int index, Direction direction) {
         ItemStack itemstack = inventoryIn.getStackInSlot(index);
-        if (!itemstack.isEmpty() && canExtractItemFromSlot(inventoryIn, itemstack, index, direction) && isItemStackAllowed(itemstack)) {
+        if (!itemstack.isEmpty() && canExtractItemFromSlot(inventoryIn, itemstack, index, direction) && isItemStackAllowed(itemstack, hopper)) {
             ItemStack itemstack1 = itemstack.copy();
             ItemStack itemstack2 = HopperTileEntity.putStackInInventoryAllSlots(inventoryIn, hopper, inventoryIn.decrStackSize(index, 1), (Direction) null);
             if (itemstack2.isEmpty()) {
@@ -130,26 +134,26 @@ public class TileFilteredHopper extends TileHopperBase {
         return whitelist == in;
     }
 
-    public boolean isItemStackAllowed(ItemStack in) {
+    public static boolean isItemStackAllowed(ItemStack in, IFilteredHopper f) {
         boolean matchesItem = false, matchesMeta = false, matchesNBT = false, matchesMod = false;
 
-        for (int i = getSizeInventoryForOutput(); i < getSizeInventory(); i++) {
-            if (getStackInSlot(i).getItem().equals(in.getItem())) {
+        for (int i = f.getFirstFilterSlot(); i < f.getSizeInventory(); i++) {
+            if (f.getStackInSlot(i).getItem().equals(in.getItem())) {
                 matchesItem = true;
-                if (getStackInSlot(i).getDamage() == in.getDamage())
+                if (f.getStackInSlot(i).getDamage() == in.getDamage())
                     matchesMeta = true;
-                if (getStackInSlot(i).getOrCreateTag().equals(in.getOrCreateTag()))
+                if (f.getStackInSlot(i).getOrCreateTag().equals(in.getOrCreateTag()))
                     matchesNBT = true;
             }
-            if (getModName(getStackInSlot(i)).equals(getModName(in)))
+            if (getModName(f.getStackInSlot(i)).equals(getModName(in)))
                 matchesMod = true;
         }
 
-        if (whitelist) {
-            return (matchesMod || matchesItem) && (!matchMeta || matchesMeta) && (!matchNBT || matchesNBT) &&
-                    (!matchMod || matchesMod);
+        if (f.whitelist()) {
+            return (matchesMod || matchesItem) && (!f.matchMeta() || matchesMeta) && (!f.matchNBT() || matchesNBT) &&
+                    (!f.matchMod() || matchesMod);
         }
-        return (!matchesItem && !matchMod) || (matchMeta && !matchesMeta) || (matchNBT && !matchesNBT) || (matchMod && !matchesMod);
+        return (!matchesItem && !f.matchMod()) || (f.matchMeta() && !matchesMeta) || (f.matchNBT() && !matchesNBT) || (f.matchMod() && !matchesMod);
     }
 
     @Override
@@ -157,7 +161,8 @@ public class TileFilteredHopper extends TileHopperBase {
         super.tick();
     }
 
-    public boolean pullItems(IHopper hopper) {
+    public static boolean pullItems(IHopper h) {
+        IFilteredHopper hopper = (IFilteredHopper) h;
         Boolean ret = net.minecraftforge.items.VanillaInventoryCodeHooks.extractHook(hopper);
         if (ret != null) return ret;
         IInventory iinventory = HopperTileEntity.getSourceInventory(hopper);
@@ -168,7 +173,7 @@ public class TileFilteredHopper extends TileHopperBase {
                     -> pullItemFromSlot(hopper, iinventory, index, direction));
         } else {
             for (ItemEntity itementity : HopperTileEntity.getCaptureItems(hopper)) {
-                if (isItemStackAllowed(itementity.getItem()) && HopperTileEntity.captureItem(hopper, itementity)) {
+                if (isItemStackAllowed(itementity.getItem(), hopper) && HopperTileEntity.captureItem(hopper, itementity)) {
                     return true;
                 }
             }
@@ -183,7 +188,7 @@ public class TileFilteredHopper extends TileHopperBase {
             // Filter slots
             return false;
         } else {
-            return isItemStackAllowed(stack);
+            return isItemStackAllowed(stack, this);
         }
     }
 
@@ -197,12 +202,41 @@ public class TileFilteredHopper extends TileHopperBase {
         compound.putBoolean("MatchMeta", matchMeta);
         compound.putBoolean("MatchNBT", matchNBT);
         compound.putBoolean("MatchMod", matchMod);
-        compound.putBoolean("Whitelist", matchMod);
+        compound.putBoolean("Whitelist", whitelist);
         return super.write(compound);
     }
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
+        matchMeta = nbt.getBoolean("MatchMeta");
+        matchNBT = nbt.getBoolean("MatchNBT");
+        matchMod = nbt.getBoolean("MatchMod");
+        whitelist = nbt.getBoolean("Whitelist");
         super.read(state, nbt);
+    }
+
+    @Override
+    public boolean whitelist() {
+        return whitelist;
+    }
+
+    @Override
+    public boolean matchMeta() {
+        return matchMeta;
+    }
+
+    @Override
+    public boolean matchMod() {
+        return matchMod;
+    }
+
+    @Override
+    public boolean matchNBT() {
+        return matchNBT;
+    }
+
+    @Override
+    public int getFirstFilterSlot() {
+        return getSizeInventoryForOutput();
     }
 }

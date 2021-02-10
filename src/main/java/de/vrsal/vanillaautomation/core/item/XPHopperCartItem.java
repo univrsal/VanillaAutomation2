@@ -1,5 +1,6 @@
 package de.vrsal.vanillaautomation.core.item;
 
+import de.vrsal.vanillaautomation.core.entity.FilteredHopperCartEntity;
 import de.vrsal.vanillaautomation.core.entity.XPHopperCartEntity;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class XPHopperCartItem extends Item {
+
 	private static final IDispenseItemBehavior MINECART_DISPENSER_BEHAVIOR = new DefaultDispenseItemBehavior() {
 		private final DefaultDispenseItemBehavior behaviourDefaultDispenseItem = new DefaultDispenseItemBehavior();
 
@@ -30,14 +32,12 @@ public class XPHopperCartItem extends Item {
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
 			Direction direction = source.getBlockState().get(DispenserBlock.FACING);
 			World world = source.getWorld();
-			double d0 = source.getX() + (double) direction.getXOffset() * 1.125D;
-			double d1 = Math.floor(source.getY()) + (double) direction.getYOffset();
-			double d2 = source.getZ() + (double) direction.getZOffset() * 1.125D;
+			double d0 = source.getX() + (double)direction.getXOffset() * 1.125D;
+			double d1 = Math.floor(source.getY()) + (double)direction.getYOffset();
+			double d2 = source.getZ() + (double)direction.getZOffset() * 1.125D;
 			BlockPos blockpos = source.getBlockPos().offset(direction);
 			BlockState blockstate = world.getBlockState(blockpos);
-			RailShape railshape = blockstate.getBlock() instanceof AbstractRailBlock
-					? ((AbstractRailBlock) blockstate.getBlock()).getRailDirection(blockstate, world, blockpos, null)
-					: RailShape.NORTH_SOUTH;
+			RailShape railshape = blockstate.getBlock() instanceof AbstractRailBlock ? ((AbstractRailBlock)blockstate.getBlock()).getRailDirection(blockstate, world, blockpos, null) : RailShape.NORTH_SOUTH;
 			double d3;
 			if (blockstate.isIn(BlockTags.RAILS)) {
 				if (railshape.isAscending()) {
@@ -51,9 +51,7 @@ public class XPHopperCartItem extends Item {
 				}
 
 				BlockState blockstate1 = world.getBlockState(blockpos.down());
-				RailShape railshape1 = blockstate1.getBlock() instanceof AbstractRailBlock
-						? blockstate1.get(((AbstractRailBlock) blockstate1.getBlock()).getShapeProperty())
-						: RailShape.NORTH_SOUTH;
+				RailShape railshape1 = blockstate1.getBlock() instanceof AbstractRailBlock ? blockstate1.get(((AbstractRailBlock)blockstate1.getBlock()).getShapeProperty()) : RailShape.NORTH_SOUTH;
 				if (direction != Direction.DOWN && railshape1.isAscending()) {
 					d3 = -0.4D;
 				} else {
@@ -100,7 +98,7 @@ public class XPHopperCartItem extends Item {
 					d0 = 0.5D;
 				}
 
-				XPHopperCartEntity minecartentity = XPHopperCartEntity.create(world, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.0625D + d0, (double) blockpos.getZ() + 0.5D);
+				XPHopperCartEntity minecartentity = new XPHopperCartEntity(world, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.0625D + d0, (double) blockpos.getZ() + 0.5D);
 				if (itemstack.hasDisplayName()) {
 					minecartentity.setCustomName(itemstack.getDisplayName());
 				}
@@ -112,4 +110,5 @@ public class XPHopperCartItem extends Item {
 			return ActionResultType.func_233537_a_(world.isRemote);
 		}
 	}
+
 }

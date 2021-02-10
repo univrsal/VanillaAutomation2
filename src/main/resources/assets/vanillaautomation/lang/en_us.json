@@ -3,9 +3,9 @@
     "block.vanillaautomation.filtered_hopper": "Filtered Hopper",
     "vanillaautomation.container.xp_hopper": "XP Hopper",
     "vanillaautomation.container.filtered_hopper": "Filtered Hopper",
-    "item.vanillaautomation.xp_hopper_cart": "XP Hopper Minecart",
+    "item.vanillaautomation.xp_hopper_cart": "Minecart with XP Hopper",
     "entity.vanillaautomation.xp_hopper_cart": "XP Hopper Minecart",
-    "item.vanillaautomation.filtered_hopper_cart": "Filtered Hopper Minecart",
+    "item.vanillaautomation.filtered_hopper_cart": "Minecart with Filtered Hopper",
     "entity.vanillaautomation.filtered_hopper_cart": "Filtered Hopper Minecart",
 
     "gui.vanillaautomation.match.meta": "Match meta",

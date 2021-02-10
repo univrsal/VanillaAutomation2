@@ -1,8 +1,11 @@
 package de.vrsal.vanillaautomation.core.network.messages;
 
 import de.vrsal.vanillaautomation.VanillaAutomation;
+import de.vrsal.vanillaautomation.core.block.tileentity.IFilteredHopper;
 import de.vrsal.vanillaautomation.core.block.tileentity.TileFilteredHopper;
+import de.vrsal.vanillaautomation.core.container.BaseContainer;
 import de.vrsal.vanillaautomation.core.container.FilteredHopperContainer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -37,17 +40,19 @@ public class MessageFilterChanged {
     public static void handle(final MessageFilterChanged msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
-                TileFilteredHopper te = null;
+                IFilteredHopper hopper = null;
                 Container openContainer = Objects.requireNonNull(ctx.get().getSender()).openContainer;
-                if (openContainer instanceof FilteredHopperContainer) {
-                    te = ((FilteredHopperContainer) ctx.get().getSender().openContainer).getTile();
+                if (openContainer instanceof BaseContainer) {
+                    IInventory tileInventory = ((BaseContainer) openContainer).getTileInventory();
+                    if (tileInventory instanceof IFilteredHopper)
+                        hopper = (IFilteredHopper) tileInventory;
                 }
 
-                if (te != null) {
-                    te.setMatchNBT(msg.matchNBT);
-                    te.setMatchMeta(msg.matchMeta);
-                    te.setMatchMod(msg.matchMod);
-                    te.setWhitelist(msg.whitelist);
+                if (hopper != null) {
+                    hopper.setMatchNBT(msg.matchNBT);
+                    hopper.setMatchMeta(msg.matchMeta);
+                    hopper.setMatchMod(msg.matchMod);
+                    hopper.setWhitelist(msg.whitelist);
                 }
             }
         });

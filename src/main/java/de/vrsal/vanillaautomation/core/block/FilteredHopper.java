@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -55,20 +56,15 @@ public class FilteredHopper extends HopperBlock {
     }
 
     @Override
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return VoxelShapes.empty();
-    }
-
-    @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.isIn(newState.getBlock())) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof TileFilteredHopper) {
                 TileFilteredHopper te = (TileFilteredHopper) tileentity;
-                // don't drop filters
-                for(int i = 0; i < te.getSizeInventoryForOutput(); ++i) {
-                    InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getY(), te.getStackInSlot(i));
-                }
+                // Clear filters
+                for (int i = te.getFirstFilterSlot(); i < te.getSizeInventory(); i++)
+                    te.setInventorySlotContents(i, ItemStack.EMPTY);
+                InventoryHelper.dropInventoryItems(worldIn, pos, (TileFilteredHopper) tileentity);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
             super.onReplaced(state, worldIn, pos, newState, isMoving);

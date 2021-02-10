@@ -14,9 +14,7 @@ public class ClientRenderers {
 
     @OnlyIn(Dist.CLIENT)
     public static void setup() {
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.XP_HOPPER_CART.get(), new IRenderFactory<AbstractMinecartEntity>() {
-            @Override
-            public EntityRenderer<? super AbstractMinecartEntity> createRenderFor(EntityRendererManager manager) { return new MinecartRenderer<>(manager); }
-        });
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.XP_HOPPER_CART.get(), (IRenderFactory<AbstractMinecartEntity>) MinecartRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.FILTERED_HOPPER_CART.get(), (IRenderFactory<AbstractMinecartEntity>) MinecartRenderer::new);
     }
 }

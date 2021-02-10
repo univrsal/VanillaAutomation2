@@ -1,28 +1,31 @@
 package de.vrsal.vanillaautomation.core.container;
 
+import de.vrsal.vanillaautomation.core.block.tileentity.IFilteredHopper;
 import de.vrsal.vanillaautomation.core.block.tileentity.TileFilteredHopper;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 
 public class FilteredHopperContainer extends BaseContainer {
     private final IIntArray fields;
 
-    TileFilteredHopper te = null;
+    IInventory hopperInventory = null;
 
-    public FilteredHopperContainer(ContainerType<? extends BaseContainer> type, int id, PlayerInventory playerInventory, IInventory tileInventory, IIntArray fields) {
+    public FilteredHopperContainer(ContainerType<? extends BaseContainer> type, int id, PlayerInventory playerInventory, IInventory tileInventory, IIntArray fields)
+    {
         super(type, id, playerInventory, tileInventory);
         assertIntArraySize(fields, 4);
         assertInventorySize(tileInventory, 5);
 
         tileInventory.openInventory(playerInventory.player);
 
-        if (tileInventory instanceof TileFilteredHopper)
-            this.te = (TileFilteredHopper) tileInventory;
+        this.hopperInventory = tileInventory;
         int halfInv = tileInventory.getSizeInventory() / 2;
 
         // Hopper inv
@@ -64,8 +67,27 @@ public class FilteredHopperContainer extends BaseContainer {
         return new FilteredHopperContainer(ModContainers.FILTERED_HOPPER.get(), id, player, hopperInv, fields);
     }
 
-    public TileFilteredHopper getTile() {
-        return te;
-    }
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            if (index < this.hopperInventory.getSizeInventory()) {
+                if (!this.mergeItemStack(itemstack1, this.hopperInventory.getSizeInventory() / 2, this.inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.mergeItemStack(itemstack1, 0, this.hopperInventory.getSizeInventory() / 2, false)) {
+                return ItemStack.EMPTY;
+            }
 
+            if (itemstack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+        }
+
+        return itemstack;
+    }
 }
