@@ -5,6 +5,7 @@ import de.vrsal.vanillaautomation.core.block.tileentity.TileXPHopper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -86,6 +87,16 @@ public class FilteredHopper extends HopperBlock {
                 return EAST_SHAPE;
             default:
                 return BASE_SHAPE;
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (stack.hasDisplayName()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof TileFilteredHopper) {
+                ((TileFilteredHopper)tileentity).setCustomName(stack.getDisplayName());
+            }
         }
     }
 }

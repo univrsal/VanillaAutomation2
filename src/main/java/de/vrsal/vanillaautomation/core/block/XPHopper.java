@@ -8,10 +8,12 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -58,6 +60,16 @@ public class XPHopper extends HopperBlock {
 			}
 
 			super.onReplaced(state, worldIn, pos, newState, isMoving);
+		}
+	}
+
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (stack.hasDisplayName()) {
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if (tileentity instanceof TileXPHopper) {
+				((TileXPHopper)tileentity).setCustomName(stack.getDisplayName());
+			}
 		}
 	}
 }
